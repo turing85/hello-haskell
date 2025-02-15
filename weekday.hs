@@ -37,13 +37,13 @@ printIsWeekday weekdays = do
         (\weekday -> printf
             "Is %s a workday? %s.%s\n"
             (show weekday)
-            (case (isWorkday weekday) of
-                True -> "Yes"
-                False -> "No")
+            (if isWorkday weekday then 
+                "Yes" 
+                else "No")
             (case weekday of
                 Wednesday -> " It's Wednesday my Dudes."
                 Friday -> " IT'S FRIDAY THEN! GO MUFASA!"
-                otherwise -> ""))
+                _ -> ""))
         weekdays
 
 data Weekday = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
@@ -59,7 +59,7 @@ instance Enum Weekday where
     fromEnum Sunday = 6
 
     toEnum :: Int -> Weekday
-    toEnum weekday = case (weekday `mod` 7) of
+    toEnum weekday = case weekday `mod` 7 of
         0 -> Monday
         1 -> Tuesday
         2 -> Wednesday

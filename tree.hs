@@ -6,12 +6,12 @@ import Text.Printf (printf)
 main :: IO ()
 main = do
     let myTree :: Tree Double = 
-            (makeTree 5)
+            makeTree 5
                 `setLeftChild`
-                    ((makeTree 3)
-                        `setLeftChild` (makeTree (-1)))
+                    (makeTree 3
+                        `setLeftChild` makeTree (-1))
                 `setRightChild`
-                    (makeTree 2)
+                    makeTree 2
     printf "tree             : %s\n" . show $ myTree
     printf "left             : %s\n" . show $ myTree & left
     printf "left left        : %s\n" . show $ myTree & left >>= left
@@ -21,21 +21,21 @@ main = do
     printf "right left       : %s\n" . show $ myTree & right >>= left
     printf "right right      : %s\n" . show $ myTree & right >>= right
     printf "right right right: %s\n" . show $ myTree & right >>= right >>= right
-    print $ foldr (+) 0 myTree
+    print $ sum myTree
     print $ foldr (/) 10 myTree
     print $ foldl' (/) 10 myTree
     catch (print .  setRightChild myTree $ makeTree(-100)) (printHandler :: TreeException -> IO ())
     print . removeLeftChild . removeRightChild $ myTree
     where
         printHandler :: (Exception t) => t -> IO ()
-        printHandler treeException = print treeException
+        printHandler = print
 
 data TreeException = TreeException { message :: String, stack :: CallStack}
 
 instance Show TreeException where
     show :: TreeException -> String
     show (TreeException message callStack) = "*** Error: " ++ message ++
-        case (prettyCallStack callStack) of
+        case prettyCallStack callStack of
             "" -> ""
             value -> "\n" ++ value
 

@@ -13,20 +13,20 @@ listSamples = do
 
 myReverse :: [t] -> [t]
 myReverse [] = []
-myReverse(t:ts) = myReverse(ts) ++ [t]
+myReverse(t:ts) = myReverse ts ++ [t]
 
 mySort :: (Ord t) => [t] -> [t]
 mySort [] = []
 mySort list@(pivot:rest) =
-        (mySort (filter (< pivot) list)) ++ 
-        (filter (== pivot)) list ++ 
-        (mySort(filter (> pivot) list))
+        mySort (filter (< pivot) list) ++ 
+        filter (== pivot) list ++ 
+        mySort(filter (> pivot) list)
 
 
 monadSamples :: IO()
 monadSamples = do
-    print . orElseDefault $ (*2) <$> (+3) <$> safeDivide 1 0
-    print . orElseDefault $ (*2) <$> (+3) <$> safeDivide 1 2
+    print . orElseDefault $ (*2) . (+3) <$> safeDivide 1 0
+    print . orElseDefault $ (*2) . (+3) <$> safeDivide 1 2
 
 data Failable t = Failure | OK t
     deriving (Eq, Show)
@@ -36,7 +36,7 @@ instance Functor Failable where
     fmap f (OK value) = OK (f value)
 instance Applicative Failable where
     pure :: a -> Failable a
-    pure value = OK value
+    pure = OK
 
     (<*>) :: Failable (a -> b) -> Failable a -> Failable b
     Failure <*> _ = Failure
@@ -70,12 +70,12 @@ persons = do
     putStrLn $ "jd:     " ++ show jd
     putStrLn $ "Jack:   " ++ show jack
 
-    putStrLn $ "john == johnny? " ++ (show $ john == johnny)
-    putStrLn $ "john == jd?     " ++ (show $ john == jd)
-    putStrLn $ "john == jack?   " ++ (show $ john == jack)
+    putStrLn $ "john == johnny? " ++ show (john == johnny)
+    putStrLn $ "john == jd?     " ++ show (john == jd)
+    putStrLn $ "john == jack?   " ++ show (john == jack)
     
     let persons = [john, johnny, jd, jack]
-    putStrLn $ "unsorted persons: " ++ (show $ persons)
+    putStrLn $ "unsorted persons: " ++ show persons
     putStrLn $ "sorted persons:   " ++ (show . sort $ persons)
     putStrLn $ "mySorted persons: " ++ (show . mySort $ persons)
 
