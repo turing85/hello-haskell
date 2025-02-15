@@ -1,5 +1,3 @@
-module Tree_Main (main) where
-
 import Tree (
     TreeException,
     Tree,
