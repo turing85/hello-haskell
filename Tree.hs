@@ -73,22 +73,7 @@ insertTreesSorted :: (Ord t) => Tree t -> [Tree t] -> Tree t
 insertTreesSorted = foldl insertTreeSorted
 
 insertTreeSorted :: (Ord t) => Tree t -> Tree t -> Tree t
-insertTreeSorted tree (Tree valueToInsert Nothing Nothing) =
-    insertValueSorted tree valueToInsert
-insertTreeSorted tree (Tree valueToInsert (Just leftToInsert) Nothing) =
-    insertTreeSorted
-        (insertValueSorted tree valueToInsert)
-        leftToInsert
-insertTreeSorted tree (Tree valueToInsert Nothing (Just rightToInsert)) =
-    insertTreeSorted
-        (insertValueSorted tree valueToInsert)
-        rightToInsert
-insertTreeSorted tree (Tree valueToInsert (Just leftToInsert) (Just rightToInsert)) =
-    insertTreeSorted
-        (insertTreeSorted
-            (insertValueSorted tree valueToInsert)
-            leftToInsert)
-        rightToInsert
+insertTreeSorted = foldl insertValueSorted
 
 insertValuesSorted :: (Ord t) => Tree t -> [t] -> Tree t
 insertValuesSorted = foldl insertValueSorted
