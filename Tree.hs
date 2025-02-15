@@ -21,7 +21,6 @@ module Tree (
 
 import Control.Exception (Exception, throw)
 import GHC.Internal.Stack (HasCallStack, CallStack, callStack, prettyCallStack)
-import Text.Printf (printf)
 import Distribution.Compat.Prelude (Foldable (toList))
 
 data TreeException = TreeException { message :: String, stack :: CallStack }
@@ -41,11 +40,10 @@ data Tree t = Tree { value :: t, left :: Maybe (Tree t), right :: Maybe (Tree t)
 instance (Show t) => Show (Tree t) where
     show :: Tree t -> String
     show tree =
-        printf
-            "(value = %s%s%s)"
-            (show . value $ tree)
-            (maybe "" show . left $ tree)
-            (maybe "" show . right $ tree)
+        "(value = " ++ (show . value $ tree) ++
+        maybe "" ((++) ", left = " . show) (left tree) ++
+        maybe "" ((++) ", right = " . show) (right tree) ++
+        ")"
 
 makeTree :: t -> Tree t
 makeTree value = Tree value Nothing Nothing
@@ -61,7 +59,7 @@ toListInfix :: Tree t -> [t]
 toListInfix tree =
     maybe [] toListInfix (left tree) ++
     [value tree] ++
-     maybe [] toListInfix (right tree)
+    maybe [] toListInfix (right tree)
 
 toListSuffix :: Tree t -> [t]
 toListSuffix tree =

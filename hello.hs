@@ -18,9 +18,9 @@ myReverse(t:ts) = myReverse ts ++ [t]
 mySort :: (Ord t) => [t] -> [t]
 mySort [] = []
 mySort list@(pivot:rest) =
-        mySort (filter (< pivot) list) ++
-        filter (== pivot) list ++
-        mySort(filter (> pivot) list)
+    mySort (filter (< pivot) list) ++
+    filter (== pivot) list ++
+    mySort(filter (> pivot) list)
 
 
 monadSamples :: IO()
