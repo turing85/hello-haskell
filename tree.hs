@@ -5,7 +5,7 @@ import Text.Printf (printf)
 
 main :: IO ()
 main = do
-    let myTree :: Tree Double = 
+    let myTree :: Tree Double =
             makeTree 5
                 `setLeftChild`
                     (makeTree 3
@@ -41,15 +41,15 @@ instance Show TreeException where
 
 instance Exception TreeException
 
-data Tree t = Tree { value :: t, left :: Maybe (Tree t), right :: Maybe (Tree t) } 
+data Tree t = Tree { value :: t, left :: Maybe (Tree t), right :: Maybe (Tree t) }
     deriving (Eq, Foldable)
 
 instance (Show t) => Show (Tree t) where
     show :: Tree t -> String
-    show (Tree value left right) = 
-        printf 
-            "(value = %s%s%s)" 
-            (show value) 
+    show (Tree value left right) =
+        printf
+            "(value = %s%s%s)"
+            (show value)
             (case left of
                 Nothing -> ""
                 (Just tree) -> printf ", left = %s" (show tree))

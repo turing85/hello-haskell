@@ -83,7 +83,7 @@ type FirstName = String
 type LastName = String
 type Age = Integer
 data Person = Person { firstName :: FirstName, lastName :: LastName, age :: Age }
-   deriving (Eq, Ord) 
+  deriving (Eq, Ord) 
 instance Show Person where
     show :: Person -> String
     show person = printf 
@@ -106,15 +106,11 @@ instance Show Person where
 --         age lhs /= age rhs
 -- instance Ord Person where
 --     (<) :: Person -> Person -> Bool
---     lhs < rhs = 
---         if compareFirstNames == LT then True
---         else if compareFirstNames == EQ then
---             if compareLastNames == LT then True
---             else if compareLastNames == EQ then
---                 if compareAges == LT then True
---                 else False
---             else False
---         else False
+--     lhs < rhs
+--         | compareFirstNames == LT = True
+--         | compareFirstNames == EQ = 
+--             compareLastNames == LT  || (compareLastNames == EQ  && compareAges == LT)
+--         | compareFirstNames == GT = False
 --         where
 --             compareFirstNames = firstName lhs `compare` firstName rhs
 --             compareLastNames =  lastName lhs `compare` lastName rhs
@@ -128,7 +124,7 @@ instance Show Person where
 
 --     (>=) :: Person -> Person -> Bool
 --     lhs >= rhs = rhs < lhs || rhs == lhs
---     compare lhs rhs = 
---         if lhs == rhs then EQ
---         else if lhs < rhs then LT
---         else GT
+--     compare lhs rhs
+--         | lhs == rhs = EQ
+--         | lhs < rhs = LT
+--         | lhs > rhs = GT

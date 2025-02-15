@@ -37,8 +37,8 @@ printIsWeekday weekdays = do
         (\weekday -> printf
             "Is %s a workday? %s.%s\n"
             (show weekday)
-            (if isWorkday weekday then 
-                "Yes" 
+            (if isWorkday weekday
+                then "Yes"
                 else "No")
             (case weekday of
                 Wednesday -> " It's Wednesday my Dudes."
