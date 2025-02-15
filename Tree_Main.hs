@@ -36,15 +36,16 @@ main = do
     catch (print .  setRightChild myTree $ makeTree(-100)) (printHandler :: TreeException -> IO ())
     catch (print . removeLeftChild . removeRightChild . removeLeftChild $ myTree) (printHandler :: TreeException -> IO ())
     let sortedTree :: Tree Double = sortTree myTree
-    printf "Sorted tree:                       %s\n" . show $ sortedTree
-    printf "Sorted tree left:                  %s\n" . show $ sortedTree
-    printf "Sorted tree left left:             %s\n" . show $ sortedTree & left >>= left
-    printf "Sorted tree left left right:       %s\n" . show $ sortedTree & left >>= left >>= right
-    printf "One-node sorted tree:              %s\n" . show . sortTree . makeTree $ 5
+    printf "sorted tree:                       %s\n" . show $ sortedTree
+    printf "sorted tree left:                  %s\n" . show $ sortedTree
+    printf "sorted tree left left:             %s\n" . show $ sortedTree & left >>= left
+    printf "sorted tree left left right:       %s\n" . show $ sortedTree & left >>= left >>= right
+    printf "one-node sorted tree:              %s\n" . show . sortTree . makeTree $ 5
+    printf "tree as list:                      %s\n" . show . toList $ myTree
+    printf "sorted tree as list:               %s\n" . show . toList . sortTree $ myTree
     let largerTree :: Tree Double = makeLargerTree
     printf "larger tree:                       %s\n" . show $ largerTree
     printf "larger sorted tree:                %s\n" . show . sortTree $ largerTree
-    printf "Tree as list:                      %s\n" . show . toList $ largerTree
     printf "larger tree as list:               %s\n" . show . toList $ largerTree
     printf "larger sorted tree as list:        %s\n" . show . toList . sortTree $ largerTree
     printf "larger sorted tree as infix list:  %s\n" . show . toListInfix . sortTree $ largerTree
