@@ -22,8 +22,8 @@ main = do
     printf "right right      : %s\n" . show $ myTree & right >>= right
     printf "right right right: %s\n" . show $ myTree & right >>= right >>= right
     print $ sum myTree
-    print $ foldr (/) 10 myTree
-    print $ foldl' (/) 10 myTree
+    print $ foldr (/) 10 myTree  -- = 5 / (3 / (-1 / (2 / 10)))  = -8.3...
+    print $ foldl' (/) 10 myTree -- = 2 / (3 / (-1 / (10 / 5)))  = -0.3...
     catch (print .  setRightChild myTree $ makeTree(-100)) (printHandler :: TreeException -> IO ())
     print . removeLeftChild . removeRightChild $ myTree
     where
