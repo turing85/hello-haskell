@@ -1,17 +1,17 @@
 import Tree (
-    TreeException,
     Tree (Tree),
-    value,
+    TreeException,
     left,
-    right,
     makeTree,
-    toListPrefix,
-    toListInfix,
-    toListSuffix,
+    removeLeftChild,
+    removeRightChild,
+    right,
     setLeftChild,
     setRightChild,
-    removeLeftChild,
-    removeRightChild)
+    toListInfix,
+    toListPrefix,
+    toListSuffix,
+    value)
 import Tree.Ord (sortTree)
 import Control.Exception (Exception, catch, throw)
 import Data.Function ((&))
@@ -22,37 +22,43 @@ import Data.Maybe (Maybe(Nothing))
 
 main :: IO ()
 main = do
-    let myTree :: Tree Double = makeSmallTree
-    printf "tree:                               %s\n" . show $ myTree
-    printf "left:                               %s\n" . show $ myTree & left
-    printf "left leftx:                         %s\n" . show $ myTree & left >>= left
-    printf "left left left:                     %s\n" . show $ myTree & left >>= left >>= left
-    printf "left left right:                    %s\n" . show $ myTree & left >>= left >>= right
-    printf "right:                              %s\n" . show $ myTree & right
-    printf "right left:                         %s\n" . show $ myTree & right >>= left
-    printf "right right:                        %s\n" . show $ myTree & right >>= right
-    printf "right right right:                  %s\n" . show $ myTree & right >>= right >>= right
-    print $ sum myTree
-    print $ foldr (/) 10 myTree  -- = 5 / (3 / (-1 / (2 / 10))) = -8.3...
-    print $ foldl' (/) 10 myTree -- = 2 / (3 / (-1 / (10 / 5))) = -0.3...
-    print . removeLeftChild . removeRightChild $ myTree
-    catch (print .  setRightChild myTree $ makeTree(-100)) (printHandler :: TreeException -> IO ())
-    catch (print . removeLeftChild . removeRightChild . removeLeftChild $ myTree) (printHandler :: TreeException -> IO ())
-    let sortedTree :: Tree Double = sortTree myTree
-    printf "sorted tree:                        %s\n" . show $ sortedTree
-    printf "sorted tree left:                   %s\n" . show $ sortedTree
-    printf "sorted tree left left:              %s\n" . show $ sortedTree & left >>= left
-    printf "sorted tree left left right:        %s\n" . show $ sortedTree & left >>= left >>= right
-    printf "one-node sorted tree:               %s\n" . show . sortTree . makeTree $ 5
-    printf "tree as list:                       %s\n" . show . toListPrefix $ myTree
-    printf "sorted tree as list:                %s\n" . show . toListPrefix . sortTree $ myTree
+    let smallTree :: Tree Double = makeSmallTree
+    printMessageLn "small tree:" . show $ smallTree
+    printMessageLn "small tree left:" . show $ smallTree & left
+    printMessageLn "small tree left left:". show $ smallTree & left >>= left
+    printMessageLn "small tree left left left:". show $ smallTree & left >>= left >>= left
+    printMessageLn "small tree left left right:" . show $ smallTree & left >>= left >>= right
+    printMessageLn "small tree right:" . show $ smallTree & right
+    printMessageLn "small tree right left:" . show $ smallTree & right >>= left
+    printMessageLn "small tree right right:" . show $ smallTree & right >>= right
+    printMessageLn "small tree right right right:" . show $ smallTree & right >>= right >>= right
+    print $ sum smallTree
+    print $ foldr (/) 10 smallTree  -- = 5 / (3 / (-1 / (2 / 10))) = -8.3...
+    print $ foldl' (/) 10 smallTree -- = 2 / (3 / (-1 / (10 / 5))) = -0.3...
+    print . removeLeftChild . removeRightChild $ smallTree
+    catch
+        (print .  setRightChild smallTree $ makeTree(-100))
+        (printHandler :: TreeException -> IO ())
+    catch
+        (print . removeLeftChild . removeRightChild . removeLeftChild $ smallTree)
+        (printHandler :: TreeException -> IO ())
+    let sortedTree :: Tree Double = sortTree smallTree
+    printMessageLn "sorted small tree:" . show $ sortedTree
+    printMessageLn "sorted small tree left:" . show $ sortedTree
+    printMessageLn "sorted small tree left left:" . show $ sortedTree & left >>= left
+    printMessageLn
+        "sorted small tree left left right:" . show $ sortedTree & left >>= left >>= right
+    printMessageLn "one-node sorted tree:" . show . sortTree . makeTree $ 5
+    printMessageLn "small tree as list:" . show . toListPrefix $ smallTree
+    printMessageLn "sorted small  tree as list:" . show . toListPrefix . sortTree $ smallTree
     let largerTree :: Tree Double = makeLargerTree
-    printf "larger tree:                        %s\n" . show $ largerTree
-    printf "larger sorted tree:                 %s\n" . show . sortTree $ largerTree
-    printf "larger tree as list:                %s\n" . show . toListPrefix $ largerTree
-    printf "larger sorted tree as list:         %s\n" . show . toListPrefix . sortTree $ largerTree
-    printf "larger sorted tree as infix list:   %s\n" . show . toListInfix . sortTree $ largerTree
-    printf "larger sorted tree as suffix list:  %s\n" . show . toListSuffix . sortTree $ largerTree
+    printMessageLn "larger tree:" . show $ largerTree
+    printMessageLn "sorted larger tree:" . show . sortTree $ largerTree
+    printMessageLn "larger tree as list:" . show . toListPrefix $ largerTree
+    printMessageLn "sorted larger tree as list:" . show . toListPrefix . sortTree $ largerTree
+    printMessageLn "sorted larger tree as infix list:" . show . toListInfix . sortTree $ largerTree
+    printMessageLn
+        "sorted larger tree as suffix list:" . show . toListSuffix . sortTree $ largerTree
     where
         printHandler :: (Exception t) => t -> IO ()
         printHandler = print
@@ -74,3 +80,6 @@ makeLargerTree = makeTree 4
         (makeTree 2
             `setLeftChild` makeTree 3
             `setRightChild` makeTree 1)
+
+printMessageLn :: String -> String -> IO ()
+printMessageLn = printf "%-35s %s\n"

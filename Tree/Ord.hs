@@ -1,16 +1,16 @@
 module Tree.Ord (
-    sortTree,
-    insertTreesSorted,
     insertTreeSorted,
+    insertTreesSorted,
+    insertValueSorted,
     insertValuesSorted,
-    insertValueSorted)
+    sortTree)
     where
 
 import Tree (
-    TreeException,
     Tree (Tree),
-    makeTree,
-    toListPrefix)
+    TreeException,
+    toListPrefix,
+    makeTree)
 
 sortTree :: (Ord t) => Tree t -> Tree t
 sortTree tree = insertValuesSorted (makeTree first) rest

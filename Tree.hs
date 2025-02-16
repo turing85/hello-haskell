@@ -1,17 +1,17 @@
 module Tree (
-    TreeException,
     Tree (Tree),
-    value,
+    TreeException,
     left,
-    right,
     makeTree,
-    toListPrefix,
-    toListInfix,
-    toListSuffix,
+    removeLeftChild,
+    removeRightChild,
+    right,
     setLeftChild,
     setRightChild,
-    removeLeftChild,
-    removeRightChild)
+    toListInfix,
+    toListPrefix,
+    toListSuffix,
+    value)
     where
 
 import Control.Exception (Exception, throw)
