@@ -62,10 +62,7 @@ toListInfix tree =
     maybe [] toListInfix (right tree)
 
 toListSuffix :: Tree t -> [t]
-toListSuffix tree =
-    maybe [] toListSuffix (left tree) ++
-    maybe [] toListPrefix (right tree) ++
-    [value tree]
+toListSuffix = foldl (flip (:)) ([]::[t])
 
 insertTreesSorted :: (Ord t) => Tree t -> [Tree t] -> Tree t
 insertTreesSorted = foldl insertTreeSorted
