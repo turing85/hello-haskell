@@ -1,6 +1,7 @@
 module Tree (
     Tree (Tree),
     TreeException,
+    depth,
     left,
     makeTree,
     removeLeftChild,
@@ -42,6 +43,9 @@ instance (Show t) => Show (Tree t) where
 
 makeTree :: t -> Tree t
 makeTree value = Tree value Nothing Nothing
+
+depth :: Tree t -> Integer
+depth (Tree _ left right) = 1 + max (maybe 0 depth left) (maybe 0 depth right)
 
 toListPrefix :: Tree t -> [t]
 toListPrefix = toList

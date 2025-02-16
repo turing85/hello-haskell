@@ -1,6 +1,7 @@
 import Tree (
     Tree (Tree),
     TreeException,
+    depth,
     left,
     makeTree,
     removeLeftChild,
@@ -59,6 +60,7 @@ main = do
     printMessageLn "sorted larger tree as infix list:" . show . toListInfix . sortTree $ largerTree
     printMessageLn
         "sorted larger tree as suffix list:" . show . toListSuffix . sortTree $ largerTree
+    printMessageLn "sorted lager tree depth" . show . depth $ largerTree
     where
         printHandler :: (Exception t) => t -> IO ()
         printHandler = print
