@@ -17,10 +17,10 @@ import Data.Type.Ord (OrderingI(LTI))
 
 isSorted :: (Ord t) => Tree t -> Bool
 isSorted (Tree value left right) =
+    maybe True ((>) value . Tree.value) left &&
+    maybe True ((<) value . Tree.value) right &&
     maybe True isSorted left &&
-    maybe True isSorted right &&
-    maybe True (\child -> value > Tree.value child) left &&
-    maybe True (\child -> value < Tree.value child) right
+    maybe True isSorted right
 
 sortTree :: (Ord t) => Tree t -> Tree t
 sortTree tree = case isSorted tree of 
