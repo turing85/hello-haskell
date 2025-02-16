@@ -7,10 +7,11 @@ import Tree (
     makeTree,
     sortTree,
     toListInfix,
+    toListSuffix,
     setLeftChild,
     setRightChild,
     removeLeftChild,
-    removeRightChild, toListSuffix)
+    removeRightChild)
 import Control.Exception (Exception, catch, throw)
 import Data.Function ((&))
 import GHC.Internal.Stack (HasCallStack, CallStack, callStack, prettyCallStack)
