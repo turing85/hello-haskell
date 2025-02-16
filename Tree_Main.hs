@@ -1,22 +1,24 @@
 import Tree (
     TreeException,
-    Tree,
+    Tree (Tree),
     value,
     left,
     right,
     makeTree,
-    sortTree,
+    toListPrefix,
     toListInfix,
     toListSuffix,
     setLeftChild,
     setRightChild,
     removeLeftChild,
     removeRightChild)
+import Tree.Ord (sortTree)
 import Control.Exception (Exception, catch, throw)
 import Data.Function ((&))
 import GHC.Internal.Stack (HasCallStack, CallStack, callStack, prettyCallStack)
 import Text.Printf (printf)
 import Distribution.Compat.Prelude (isNothing, Foldable (toList))
+import Data.Maybe (Maybe(Nothing))
 
 main :: IO ()
 main = do
@@ -42,13 +44,13 @@ main = do
     printf "sorted tree left left:              %s\n" . show $ sortedTree & left >>= left
     printf "sorted tree left left right:        %s\n" . show $ sortedTree & left >>= left >>= right
     printf "one-node sorted tree:               %s\n" . show . sortTree . makeTree $ 5
-    printf "tree as list:                       %s\n" . show . toList $ myTree
-    printf "sorted tree as list:                %s\n" . show . toList . sortTree $ myTree
+    printf "tree as list:                       %s\n" . show . toListPrefix $ myTree
+    printf "sorted tree as list:                %s\n" . show . toListPrefix . sortTree $ myTree
     let largerTree :: Tree Double = makeLargerTree
     printf "larger tree:                        %s\n" . show $ largerTree
     printf "larger sorted tree:                 %s\n" . show . sortTree $ largerTree
-    printf "larger tree as list:                %s\n" . show . toList $ largerTree
-    printf "larger sorted tree as list:         %s\n" . show . toList . sortTree $ largerTree
+    printf "larger tree as list:                %s\n" . show . toListPrefix $ largerTree
+    printf "larger sorted tree as list:         %s\n" . show . toListPrefix . sortTree $ largerTree
     printf "larger sorted tree as infix list:   %s\n" . show . toListInfix . sortTree $ largerTree
     printf "larger sorted tree as suffix list:  %s\n" . show . toListSuffix . sortTree $ largerTree
     where

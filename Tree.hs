@@ -1,18 +1,13 @@
 module Tree (
     TreeException,
-    Tree,
+    Tree (Tree),
     value,
     left,
     right,
     makeTree,
-    sortTree,
     toListPrefix,
     toListInfix,
     toListSuffix,
-    insertTreesSorted,
-    insertTreeSorted,
-    insertValuesSorted,
-    insertValueSorted,
     setLeftChild,
     setRightChild,
     removeLeftChild,
@@ -48,54 +43,20 @@ instance (Show t) => Show (Tree t) where
 makeTree :: t -> Tree t
 makeTree value = Tree value Nothing Nothing
 
-sortTree :: (Ord t) => Tree t -> Tree t
-sortTree tree = insertValuesSorted (makeTree first) rest
-    where (first:rest) = toListPrefix tree
-
 toListPrefix :: Tree t -> [t]
 toListPrefix = toList
 
 toListInfix :: Tree t -> [t]
-toListInfix tree =
-    maybe [] toListInfix (left tree) ++
-    [value tree] ++
-    maybe [] toListInfix (right tree)
+toListInfix (Tree value left right) =
+    maybe [] toListInfix left ++
+    [value] ++
+    maybe [] toListInfix right
 
 toListSuffix :: Tree t -> [t]
-toListSuffix = foldl (flip (:)) ([]::[t])
-
-insertTreesSorted :: (Ord t) => Tree t -> [Tree t] -> Tree t
-insertTreesSorted = foldl insertTreeSorted
-
-insertTreeSorted :: (Ord t) => Tree t -> Tree t -> Tree t
-insertTreeSorted = foldl insertValueSorted
-
-insertValuesSorted :: (Ord t) => Tree t -> [t] -> Tree t
-insertValuesSorted = foldl insertValueSorted
-
-insertValueSorted :: (Ord t) => Tree t -> t -> Tree t
-insertValueSorted tree@(Tree value left right) toInsert
-    | valueCompare == EQ = tree
-    | valueCompare == GT = case left of
-        Nothing -> Tree
-            value
-            (Just (makeTree toInsert))
-            right
-        (Just left) -> Tree
-            value
-            (Just (insertValueSorted left toInsert))
-            right
-    | valueCompare == LT = case right of
-        Nothing -> Tree
-            value
-            left
-            (Just (makeTree toInsert))
-        Just right -> Tree
-            value
-            left
-            (Just (insertValueSorted right toInsert))
-    where
-        valueCompare = value `compare` toInsert
+toListSuffix (Tree value left right) =
+    maybe [] toListSuffix left ++
+    maybe [] toListSuffix right ++
+    [value]
 
 setLeftChild :: HasCallStack => Tree t ->  Tree t -> Tree t
 setLeftChild (Tree value Nothing right) leftChild = Tree value (Just leftChild) right
