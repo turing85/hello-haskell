@@ -13,7 +13,7 @@ import Tree (
     toListPrefix,
     toListSuffix,
     value)
-import Tree.Ord (sortTree)
+import Tree.Ord (isSorted, sortTree)
 import Control.Exception (Exception, catch, throw)
 import Data.Function ((&))
 import GHC.Internal.Stack (HasCallStack, CallStack, callStack, prettyCallStack)
@@ -51,16 +51,22 @@ main = do
         "sorted small tree left left right:" . show $ sortedTree & left >>= left >>= right
     printMessageLn "one-node sorted tree:" . show . sortTree . makeTree $ 5
     printMessageLn "small tree as list:" . show . toListPrefix $ smallTree
-    printMessageLn "sorted small  tree as list:" . show . toListPrefix . sortTree $ smallTree
+    printMessageLn "sorted small  tree as list:" . show . toListPrefix $ sortedTree
     let largerTree :: Tree Double = makeLargerTree
     printMessageLn "larger tree:" . show $ largerTree
-    printMessageLn "sorted larger tree:" . show . sortTree $ largerTree
+    let sortedLargerTree = sortTree largerTree
+    printMessageLn "sorted larger tree:" . show $ sortedLargerTree
     printMessageLn "larger tree as list:" . show . toListPrefix $ largerTree
-    printMessageLn "sorted larger tree as list:" . show . toListPrefix . sortTree $ largerTree
-    printMessageLn "sorted larger tree as infix list:" . show . toListInfix . sortTree $ largerTree
+    printMessageLn "sorted larger tree as list:" . show . toListPrefix $ sortedLargerTree
+    printMessageLn "sorted larger tree as infix list:" . show . toListInfix $ sortedLargerTree
     printMessageLn
-        "sorted larger tree as suffix list:" . show . toListSuffix . sortTree $ largerTree
+        "sorted larger tree as suffix list:" . show . toListSuffix $ sortedLargerTree
     printMessageLn "sorted lager tree depth" . show . depth $ largerTree
+    printMessageLn "is small tree sorted?" . boolToYesNo . isSorted $ smallTree
+    printMessageLn "is sorted small tree sorted?" . boolToYesNo . isSorted $ sortedTree
+    printMessageLn "is larger tree sorted?" . boolToYesNo . isSorted $ largerTree
+    printMessageLn "is sorted larger tree sorted?" . boolToYesNo . isSorted $ sortedLargerTree
+    printMessageLn "is single-node tree sorted?" . boolToYesNo . isSorted . makeTree $ 5
     where
         printHandler :: (Exception t) => t -> IO ()
         printHandler = print
@@ -85,3 +91,6 @@ makeLargerTree = makeTree 4
 
 printMessageLn :: String -> String -> IO ()
 printMessageLn = printf "%-35s %s\n"
+
+boolToYesNo :: Bool -> String
+boolToYesNo bool = if bool then "yes" else "no"

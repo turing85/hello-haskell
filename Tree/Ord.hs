@@ -3,18 +3,30 @@ module Tree.Ord (
     insertTreesSorted,
     insertValueSorted,
     insertValuesSorted,
+    isSorted,
     sortTree)
     where
 
 import Tree (
     Tree (Tree),
     TreeException,
+    makeTree,
     toListPrefix,
-    makeTree)
+    value)
+import Data.Type.Ord (OrderingI(LTI))
+
+isSorted :: (Ord t) => Tree t -> Bool
+isSorted (Tree value left right) =
+    maybe True isSorted left &&
+    maybe True isSorted right &&
+    maybe True (\child -> value > Tree.value child) left &&
+    maybe True (\child -> value < Tree.value child) right
 
 sortTree :: (Ord t) => Tree t -> Tree t
-sortTree tree = insertValuesSorted (makeTree first) rest
-    where (first:rest) = toListPrefix tree
+sortTree tree = case isSorted tree of 
+    True -> tree
+    False -> insertValuesSorted (makeTree first) rest
+        where (first:rest) = toListPrefix tree
 
 insertTreesSorted :: (Ord t) => Tree t -> [Tree t] -> Tree t
 insertTreesSorted = foldl insertTreeSorted
