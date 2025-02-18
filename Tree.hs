@@ -1,23 +1,22 @@
+{-# LANGUAGE OverloadedRecordDot #-}
+
 module Tree (
-    Tree (Tree),
+    Tree (..),
     TreeException,
     depth,
-    left,
     makeTree,
     removeLeftChild,
     removeRightChild,
-    right,
     setLeftChild,
     setRightChild,
     toListInfix,
     toListPrefix,
-    toListSuffix,
-    value)
+    toListSuffix)
     where
 
 import Control.Exception (Exception, throw)
 import GHC.Internal.Stack (HasCallStack, CallStack, callStack, prettyCallStack)
-import Distribution.Compat.Prelude (Foldable (toList))
+import Data.Foldable (toList)
 
 data TreeException = TreeException { message :: String, stack :: CallStack }
 
@@ -37,15 +36,17 @@ instance (Show t) => Show (Tree t) where
     show :: Tree t -> String
     show tree =
         "(value = " ++ (show . value $ tree) ++
-        maybe "" ((++) ", left = " . show) (left tree) ++
-        maybe "" ((++) ", right = " . show) (right tree) ++
+        maybe "" ((++) ", left = " . show) tree.left ++
+        maybe "" ((++) ", right = " . show) tree.right ++
         ")"
 
 makeTree :: t -> Tree t
 makeTree value = Tree value Nothing Nothing
 
 depth :: Tree t -> Integer
-depth (Tree _ left right) = 1 + max (maybe 0 depth left) (maybe 0 depth right)
+depth (Tree _ left right) = 1 + max (depthOf left) (depthOf right)
+  where
+    depthOf = maybe 0 depth
 
 toListPrefix :: Tree t -> [t]
 toListPrefix = toList
