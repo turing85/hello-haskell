@@ -64,7 +64,7 @@ toListSuffix (Tree value left right) =
     [value]
 
 setLeftChild :: HasCallStack => Tree t ->  Tree t -> Tree t
-setLeftChild (Tree value Nothing right) leftChild = Tree value (Just leftChild) right
+setLeftChild (Tree value Nothing right) leftChild = Tree { value = value, left = Just leftChild, right = right }
 setLeftChild _ _ = throw $ TreeException "Tree already has a left child" callStack
 
 setRightChild :: HasCallStack => Tree t -> Tree t -> Tree t
